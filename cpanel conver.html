@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>2083 Colon-to-Pipe Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 160px;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-family: monospace;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Convert Colon Format → Pipe Format (Only Keep :2083)</h2>
+
+  <label for="input">Input</label>
+  <textarea id="input" placeholder="https://domain:2083:username:password"></textarea>
+
+  <button onclick="convert()">Convert</button>
+
+  <label for="output">Output</label>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    function convert() {
+      const inputLines = document.getElementById('input').value.trim().split('\n');
+      const outputLines = inputLines.map(line => {
+        const parts = line.split(':');
+        if (parts.length < 4) return null;
+
+        const url = parts.slice(0, 2).join(':'); // https://domain
+        const port = parts[2];
+        const user = parts[3];
+        const pass = parts.slice(4).join(':'); // in case password has colons
+
+        if (port !== '2083') return null;
+
+        return `${url}:${port}|${user}|${pass}`;
+      }).filter(Boolean);
+
+      document.getElementById('output').value = outputLines.join('\n');
+    }
+  </script>
+
+</body>
+</html>
